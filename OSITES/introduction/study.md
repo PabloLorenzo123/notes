@@ -39,6 +39,8 @@ to use are well worth it, but not at any cost; thus, we must strive to provide v
 ## Miscallenous
 - A device driver is some code in the operating system that knows how to deal with a specific device.
 
+- UNIX and C were closely shipped and developted together. But UNIX was not written in C, but in Assembly for its first version, then **Dennis Ritchie** Created C around 1972, evolving from B, partly because Unix needed a better systems programming language, and by 1973 UNIX was rewritten in C, which was a huge deal because it made Unix much easier to port to different machines. When organizations and universities received Unix, they often got the OS source code, much of it written in C, plus the C compiler and tools. Unix made C important, and C made Unix portable. C made the Unix more portable, because assembly language instructions are tied to the CPU architecture (PDP-11, x86, ARM), so when unix moved from cpu instruction to a higher level C instruction, you just need to change the C compiler in order to move Unix to a new computer, the source code stayed the same, but the compiled code is different and compiling is the job of the C compiler.
+
 # My takes
 
 ![Notes on introduction](assets/note0.png)

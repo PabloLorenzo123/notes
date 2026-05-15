@@ -163,6 +163,36 @@ void exercise13() {
     }
 }
 
+// Exercise 1-14. Write a program to print a histogram of the frequencies of different characters
+// in its input.
+void exercise14() {
+    int nchar[256];
+    for (int i = 0; i < 256; i++){
+        nchar[i] = 0;
+    }
+
+    int c;
+    while ((c = getchar()) != EOF) {
+        if (c != ' ' && c != '\t' && c != '\n'){
+            nchar[c]++;
+        }
+    }
+
+    // Print histogram.
+    printf("\n Character Frequency Historigram\n");
+    for (int i = 0; i < 256; i++){
+        int count = nchar[i];
+        if (count == 0){
+            continue;
+        }
+        printf("%c | ", i);
+        for (int j = 0; j < count; j++){
+            printf("#");
+        }
+        printf("\n");
+    }
+}
+
 // takes a string and converts it into a number.
 int atoi(char* i) {
     int loops = 0;
@@ -212,6 +242,9 @@ int main(int argc, char* argv[]) {
     }
     else if (option == 13) {
         exercise13();
+    }
+    else if (option == 14) {
+        exercise14();
     }
     return 0;
 }

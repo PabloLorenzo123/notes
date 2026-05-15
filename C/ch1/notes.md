@@ -55,4 +55,9 @@ int main(int argc, char* argv[]){
 ```
 
 # Good to remember.
-The data types of `int` and `float` the amount of bits it uses will depend on the cpu architecture.
+- The data types of `int` and `float` the amount of bits it uses will depend on the cpu architecture.
+- a `parameter` is a variable defined in the parentheses of the function signature, and an argument is the value that's passed by a caller to a function.
+
+- In C and most programming languages, all function arguments are passed ``by value``. This means that the called function is given the values of its arguments in temporary variables rather than the originals.
+Call by value is an asset, howerver, not a liability. It usually leads to more compact programs with fewer extraneous variables, because parameters can be treated as conveniently initialized local variables in the called routine.
+The story is different for arrays, when the name of an array is used as an arguemnt, the value passed to the function is the location or address of the beginning of the array - there is no copying of array elements.

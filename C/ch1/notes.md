@@ -54,6 +54,50 @@ int main(int argc, char* argv[]){
 }
 ```
 
+## The differeance between defining and declaring.
+In short defining means what the thing actually is, and declaring is telling the compiler such thing
+exists. Defining tells the compiler to set aside storage for this variable, function, declaring means telling the compiler such variable, function exists.
+
+According to K&R:
+"You should note that we are using the words definition and declaration carefully when we
+refer to external variables in this section.``Definition'' refers to the place where the variable is
+ 34
+created or assigned storage; ``declaration'' refers to places where the nature of the variable is
+stated but no storage is allocated. "
+
+### In variables
+Definition example, it's defining that variable counter is an integer and has a initial value of 0:
+we're also `initiailizing` the variable here.
+
+```
+int counter = 0;
+```
+declaration example:
+
+```
+extern int number; // tells the compiler, believe me in some of this .h files number is already defined, find it.
+printf("%i\n", number); // now this won't explode.
+```
+
+### in functions
+Definition example:
+```
+void hello() {
+    printf("hi")'
+}
+```
+
+declaration example:
+```
+int add(int a, int b); // trust me, you have not see the code yet, but this method is in this file.
+```
+
+Definition: create it.
+Declaration: describe it.
+
+## How C executes code, the compiling proccess.
+
+
 # Good to remember.
 - The data types of `int` and `float` the amount of bits it uses will depend on the cpu architecture.
 - a `parameter` is a variable defined in the parentheses of the function signature, and an argument is the value that's passed by a caller to a function.

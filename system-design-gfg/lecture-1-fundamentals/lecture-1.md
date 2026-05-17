@@ -20,9 +20,80 @@ On the other hand the OS sits on top of the kernel (the OS includes the kernel, 
 
 In short the kernel is like the engine, and the OS is the whole car. the engine is part of the car, not something the car sits on top of.
 
-#### Namespaces and Processes.
+Your notes are already good conceptually. I mostly tightened the wording, corrected a few inaccuracies, and preserved your explanatory style.
 
-TODO, NOT CLEAR YET.
+---
+
+#### Processes, Namespaces and Cgroups.
+
+Processes are the abstraction the kernel offers that represent an instance of a running application. A process has components such as:
+
+* an address space (virtual memory),
+* the Program Counter (PC), which stores the next instruction to execute,
+* a Stack,
+* the Code itself,
+* Static variables,
+* and other CPU registers important to the execution of the process.
+
+The kernel uses this abstraction to run multiple isolated applications concurrently. Isolation is mainly achieved through memory virtualization and CPU scheduling. The process abstraction makes programs easier to develop because it creates the illusion that the entire computer hardware is dedicated to the program itself, even though many processes are running simultaneously.
+
+The Linux kernel also offers powerful isolation and resource management mechanisms such as namespaces and cgroups.
+
+---
+
+#### Namespaces
+
+Namespaces provide isolation to processes.
+
+We can inspect running processes in Linux using commands such as:
+
+```bash id="u0f6g5"
+ps aux
+```
+
+![alt text](image-5.png)
+
+Here, as the root user, I can see all running processes in the machine. Normally, processes can see metadata about other running processes in the system.
+
+Linux provides different types of namespaces:
+
+* **PID**: isolates process IDs and process trees.
+* **NET**: isolates network interfaces, IP addresses, ports, and routing tables.
+* **MOUNT**: isolates mounted filesystems.
+* **UTS**: isolates hostname and domain name.
+* **IPC**: isolates inter-process communication resources.
+* **USER**: isolates user and group IDs.
+
+This isolation is provided directly by the kernel itself.
+
+Namespaces allow a process to believe it is running in its own isolated environment. For example:
+
+* inside a PID namespace, the process may think it is PID 1,
+* inside a NET namespace, the process may think it has its own network interfaces and ports,
+* inside a MOUNT namespace, the process only sees the filesystem mounts available in that namespace.
+
+This is one of the fundamental technologies behind containers such as Docker.
+
+---
+
+### Cgroups
+
+Namespaces provide logical isolation, but cgroups (Control Groups) provide resource control and limitation.
+
+With cgroups, the kernel can limit how many resources a process or group of processes may consume, such as:
+
+* CPU,
+* Memory,
+* Disk I/O,
+* Network bandwidth.
+
+Without cgroups, a process could potentially consume all machine resources and affect the stability of the system.
+
+Containers typically combine:
+
+* namespaces for isolation,
+* and cgroups for resource management.
+
 
 ### Bare Metal
 Bare metal refers to that, a bare metal machine, with a single hardware, kernel, operating system and applications running on top of it. just like your own laptop.
@@ -50,8 +121,9 @@ TODO THIS NOTE AIN'T THAT CLEAR YET.
 ![alt text](image-2.png)
 
 ### Containers
-Containers are isolated blundled applications that run on top of the same host OS. each container is indenpendent, this is achieved thanks to Linux Namespaces. these make them easy and quick to spin up and shut down. think of a container as a heavily isolated process environment.
+Containers are isolated blundled applications that run on top of the same host OS. each container is indenpendent, this is achieved thanks to Linux Namespaces and Cgroups. these make them easy and quick to spin up and shut down. think of a container as a heavily isolated process environment.
 
+[Great Video on Docker and How it works](https://www.youtube.com/watch?v=DUgzXX2_aDQ&t=224s)
 ### Docker.
 Docker did for containers what VMware did for VMS, it made them asy, portable, reproducible and developer-friendly.
 

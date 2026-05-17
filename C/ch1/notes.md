@@ -75,7 +75,8 @@ int counter = 0;
 declaration example:
 
 ```
-extern int number; // tells the compiler, believe me in some of this .h files number is already defined, find it.
+extern int number; 
+// tells the compiler, believe me in some of this .h files // number is already defined, find it.
 printf("%i\n", number); // now this won't explode.
 ```
 
@@ -95,8 +96,28 @@ int add(int a, int b); // trust me, you have not see the code yet, but this meth
 Definition: create it.
 Declaration: describe it.
 
-## How C executes code, the compiling proccess.
+# How C executes code, the compiling proccess.
+1 - Preprocessor: handles directives like #include, #define, and macros.
+e.x
+```include stdio.h>``` gets expanded into the actual contents of the header declarations output -> expanded C source code (.i sometimes).
 
+A declaration says:
+
+“This thing exists somewhere.”
+
+A definition says:
+
+“Here is the actual thing; allocate storage or generate code for it.”
+
+Examples:
+
+a .h file should contain mostly declarations. definitions in there should be used carefully specially if more than .c file include the same header file, the linker may complain it's found the same function multiple times.
+
+2 - Compiler: Translates C code into assembly language. output -> Assembly file (.s).
+
+3 - Assembler: Converts assembly code into machine code (binary object code), output -> object file (.o on linux, .obj on Windows), this is not executable yet, it may still contain unresolved external references.
+
+4 - linker: combines the object files and libraries into a final executable, this iwhere multiple .o/.obj files are merged, standard library functions like printf() are connected, external symbos are resolved output -> a.out, .exe.
 
 # Good to remember.
 - The data types of `int` and `float` the amount of bits it uses will depend on the cpu architecture.

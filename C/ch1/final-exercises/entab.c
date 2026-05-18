@@ -10,46 +10,52 @@
 int main()
 {
     char text[MAX_TEXT_LENGTH]; // holds the entire text.
+    for (int i = 0; i < MAX_TEXT_LENGTH; i++) {text[i] = '\0';}
     int t_i = 0;                // text index.
-    int c;                      // character input.
 
-    int column = 1;             // column in the line. base 1.
-    int last_char_col = 0;      // col corresponding to the last character in the line.
-    int last_char_txt_id = 0;   // idx of the last character in text.
-    int whiteSpaceCount = 0;    // amount of spaces of the last set of consecutive spaces.
+    int last_char_col = 0;     // col corresponding to the last character (non space non newline) in the line.
+    int last_char_txt_id = -1; // idx of the last character in text.
+    
+    int column = 1;            // column in the line. base 1.
+    int whiteSpaceCount = 0;   // amount of spaces of the last set of consecutive spaces.
 
+    int c; // character input.
     while ((c = getchar()) != EOF)
     {
+        text[t_i] = c;
         // If it's a space, check if we can trap a white space set and swap it by a tab.
         if (c == ' ')
         {
             ++whiteSpaceCount;
-
             // calculate spaces until next hop. starting from the last character placed.
             int currentTabBrack = (last_char_col / TAB_SIZE) + 1;
             int spacesUntilNextStop = (currentTabBrack * TAB_SIZE) - last_char_col;
 
             if (spacesUntilNextStop == whiteSpaceCount)
             {
-                printf("\nfound %i consecutive spaces, let's change it by a tab. last_i: %i\n", whiteSpaceCount, last_char_col);
-
                 // remove the last spaceCount white spaces.
-                for (int i = 0; i < whiteSpaceCount; i++){
-                    printf("from %s about to remove\n", text);
-                    printf("removing character %i\n", t_i - i);
+                for (int i = 0; i < whiteSpaceCount; i++)
+                {
                     text[t_i - i] = '\0';
                 }
 
                 // reset consecutive white spaces to 0.
                 whiteSpaceCount = 0;
-
                 // insert a tab after the last character column.
-                printf("inserting tab at %i\n", last_char_txt_id + 1);
-                text[last_char_txt_id + 1] = '\t';
-                
+                text[last_char_txt_id + 1] = '-';
+
                 // update text index.
                 t_i = last_char_txt_id + 2;
+
+                // update the last char column
+                last_char_col = column - whiteSpaceCount;
+                last_char_txt_id = last_char_txt_id + 1;
             }
+            else
+            {
+                ++t_i;
+            }
+            ++column;
         }
         else if (c == '\n')
         {
@@ -70,10 +76,10 @@ int main()
             ++t_i;
             ++column;
         }
-        printf("the next iteration will to %i\n", t_i);
+        text[t_i] = '\0';
     }
 
-    text[t_i] = '\0';
+    
 
     printf("result\n%s", text);
 }

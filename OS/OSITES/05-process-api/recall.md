@@ -134,24 +134,130 @@ void execExample(int argc, char* argv[]) {
 ```
 
 ## Pipes
-consist of this | , the output from the previous process is the input for the new process. The kernel offers the pipe() system call, which allows for IPC (inter process comunication), the pipe() takes as an argument an array of length 2. in where index 0 will be the buffer to write to the pipe, and 1 the one to read from. I believe that behind the scenes, pipe(arr) creates two global file descriptors, which file descriptors are saved in arr[0] and arr[1], and whenever a process writes in arr[0] the kernel copies this values to arr[1], the parent and child processes will have access to these file descriptors, in order to share messages.
+consist of this | , the output from the previous process is the input for the new process. The kernel offers the pipe() system call, which allows for IPC (inter process comunication), the pipe() takes as an argument an array of length 2. in where index 0 will be the buffer descriptor to write to the pipe, and 1 the one the descriptor to read from. this frees up from using a file to share messages between processes.
 
 ex:
 ```
 #include <stdio.h>
 #include <unistd.h>
+#include <sys/wait.h>
+#include <string.h>
+#include <stdlib.h>
 
-int main() {
+// To demonstrate pipes, let's create a program what from the current directory files
+// filter files with a certain name, using the built-in unix functions.
+// using ls and wc which are standard POSIX utilities that POSIX compliant operating systems are expected to provide.
+// ls and wc are part of the POSIX userland utilities, not kernel featurres.
+// POSIX (Portable Operating System Interface) and the X -> UNIX. POSIX defines both userland utilities (cat, ls, wc) and System intercaes (open, read, write, close, fork).
+int main(int argc, char *argv[])
+{
+    if (argc != 2)
+    {
+        printf("usage: ./pipes [folder_file_name_to_look_for].\n");
+        exit(1);
+    }
+    char *word = argv[1];
+
+    int fd[2];
+    // pipe will add at index 0, a read-end, and at index 1 a write-end. these numerical values will represent
+    // file descriptors.
+    pipe(fd);
+
+    // now i create a copy of this process, (pc, stack, static code, and most importantingly file descriptors).
+    pid_t lschild = fork();
+
+    if (lschild == 0) // child goes here.
+    {
+        // still unclear why we need to close this, but suppose now that its because we won't use this.
+        close(fd[0]);
+        // close(STDOUT_FILENO); // let's close the output file descriptor, which at this point is the terminal.
+        // fopen(fd[1]);         // now the descriptor for this will be the 1 (output), ls will print to this fd[1].
+        dup2(fd[1], STDOUT_FILENO); // this will put fd[1] in the descriptor of STDOUT_FILE.
+
+        char *args[] = {"ls", NULL};
+        execvp("ls", args);
+
+        // if exec is succesful, remember the the process code is all overwritten, so these lines would never execute.
+        perror("execvp ls");
+        exit(1);
+    }
+
+    // parent will wait for ls to be done.
+    waitpid(lschild, NULL, 0);
+
+    // now let's run wc.
+    pid_t wcchild = fork();
+
+    if (wcchild == 0)
+    {                 // it's the child process running here.
+        close(fd[1]); // this process won't write. it's important to close it because read(fd[0]) will only return EOF, when all fd[1] are closed.
+        // close(STDIN_FILEIN); // close reading descriptor.
+        // open(fd[0]);         // what ls buffered up, can now be read here.
+        dup2(fd[0], STDIN_FILENO);
+
+        char *params[] = {word, NULL};
+        execvp("wc", params);
+
+        // if exec is succesful, remember the the process code is all overwritten, so these lines would never execute.
+        perror("wc");
+        exit(1);
+    }
+
     
-}
+    close(fd[0]);
+    close(fd[1]); // if we omit this, this program will run forever, because wc the reader will never get the EOF.
 
+    waitpid(wcchild, NULL, 0);
+
+    return 0;
+}
 
 ```
 
+NOTE: Close every pipe end that a process does not need, because open write ends prevent readers from seeing EOF.
+
 ## Signals
+A signal is a notification to a process, should as 'stop' with ctrl-c the program can catch a SIGINT signal, and maybe exit gracefully.
+ex:
+```
+#include <stdio.h>
+#include <signa.h>
+#include <unistd.h>
+#include <stdbool.h>
+
+void handle_sigint(int signal_number){
+    printf("Hello gooodbye.\n");
+}
+
+int main(void) {
+    signal(SIGINT, handlesigint);
+
+    while (1){
+        printf("Working...\n");
+        sleep(1);
+    }
+
+    return 0;
+}
+```
 
 ## Users
+Users are used to identify what processes can use other processes, and what they can do with files. For instance as you saw earlier, we made a program which can call ls and wc, and even read some files, the kernel allows this because the user that triggered the program have the correct priviliges to execute these other programs. But image a malicious script, which try to delete the entire computer, the kernel needs to protect against that, for this the concept of ``users`` is borned, if this maliccious program run as low privilige user then it may not cause harm, but if you `run it as administrator` it may cause harm.
 
+In UNIX, when we need to do high privilige things, we use the `sudo` user, this user can do anything.
+
+chatgpt:
+In UNIX/POSIX systems, users are represented internally by numeric user IDs, usually called UIDs. Every process runs with a user identity, and the kernel uses that identity to decide what the process is allowed to do.
+
+For example, when a process tries to read a file, write to a file, execute a program, or signal another process, the kernel checks the process's user and group IDs against the permissions of the target resource.
+
+If I write a program that executes ls and wc, the kernel allows it only if the process has permission to execute those programs and access the files involved. The program itself does not have unlimited power; it can only do what its user identity is allowed to do.
+
+This is important for security. Imagine a malicious script that tries to delete system files. If that script runs as a normal low-privilege user, the kernel should prevent it from deleting files owned by the system or by other users. But if the same script runs with administrator-level privileges, it may be able to cause much more damage.
+
+In UNIX-like systems, the most powerful user is called root. The root user usually has UID 0 and can bypass many normal permission checks.
+
+The command sudo is not a user. It is a program that allows authorized users to run commands as another user, commonly as root. So when people say “run it with sudo,” they usually mean “run this command with root privileges.”
 
 # lampson's Law
 As lampson states in his well-regarded "Hitns for Computer Systems Design", **Get it right**. Neither abstraction nor simplicity is a substitue for getting it right. Sometimes, you just have todo the right thing, and when you do, it is way better than the alternatives. There are lots of ways to design APIs for process creation; howerver, the combination of fork() and exec() are simple and inmensely powerful. Here, the UNIX designers simply got it right. And because Lampson so often "got it right", we name the law in his honor.

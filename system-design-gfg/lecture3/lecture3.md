@@ -14,7 +14,7 @@
 
 # CAD THEOREM
 
-# Design Google Drive
+# Design Google Drive / Dropbox
 ![alt text](image-3.png)
 ## Requirements
 ### Functional Requirements
@@ -61,6 +61,7 @@ use a join tbale.
 ### File Compression
 
 ### How to encrypt the files.
+Teacher mentioned that s3 buckets offer this functionality, but i don't see how this provides an encryption end-to-end. i think he kinda said that amazon creates a key based on the client's data.
 
 # Content-Encoding Response Header, BR & GZIP
 

@@ -6,7 +6,7 @@ In this note, we'll discuss the different functions UNIX expose to working with 
 ## Windows Sucks
 
 ### POSIX (Portable Operating System Interface, the x is for UNIX)
-POSIX is an IEEE standard that defines how softeare should interact with the OS, with the goal of making software portable. By being more precise, it specifies what systems calls and cli commands should the operating systems have. In this standard is defined the process api: fork(), wait(), exec(), kill(), etc. Most OS follow this standard such as Unix, Linux and MAC except for Windows.
+POSIX is an IEEE standard that defines how software should interact with the OS, with the goal of making software portable. By being more precise, it specifies what systems calls and cli commands should the operating systems have. In this standard is defined the process api: fork(), wait(), exec(), kill(), etc. Most OS follow this standard such as Unix, Linux and MAC except for Windows.
 
 This causes the need to write different code for Windows and UNIX like system as they have different system calls.
 
@@ -15,14 +15,14 @@ This affect C source code, that executes system call directly. So in windows we 
 [VIDEO NOTE](https://youtu.be/YaFJEtGbQT8?si=F_mxAqBzHhmhpY5n)
 
 ### How to deal with it.
-We can spin up a linux vm, or use the WSL (Windows Subsystem for Linux). How i handled this limitation is by installing the WSL extension in vs code, and installing WSL on my windows computer with the Ubuntu image and installing the basic-tools gcc, etc.
+We can spin up a linux vm, or use the WSL (Windows Subsystem for Linux). How i handled this limitation is by installing the WSL extension in vs code, and installing WSL on my windows computer with the Ubuntu image and finally installing the basic-tools gcc, etc.
 
 Then in vs code i do control + p > wsl, and open the folder, open the wsl terminal and ready to work.
 
 ## FORK()
 Fork is a **system call** that creates a new child proccess, the copied child process its a copy of the parent process, including its registers current state at the moment the fork() was called in. Meaning the PC of the child process will begin pointing to fork().
 
-fork() returns 1 for the parent process, and returns 0 for the child process. -1 in case of failure.
+fork() returns the pid of the child proccess (>= 1) for the parent process, and returns 0 for the child process. -1 in case of failure.
 
 ex:
 ```
@@ -134,7 +134,24 @@ void execExample(int argc, char* argv[]) {
 ```
 
 ## Pipes
-consist of this | , the output from the previous process is the input for the new process.
+consist of this | , the output from the previous process is the input for the new process. The kernel offers the pipe() system call, which allows for IPC (inter process comunication), the pipe() takes as an argument an array of length 2. in where index 0 will be the buffer to write to the pipe, and 1 the one to read from. I believe that behind the scenes, pipe(arr) creates two global file descriptors, which file descriptors are saved in arr[0] and arr[1], and whenever a process writes in arr[0] the kernel copies this values to arr[1], the parent and child processes will have access to these file descriptors, in order to share messages.
+
+ex:
+```
+#include <stdio.h>
+#include <unistd.h>
+
+int main() {
+    
+}
+
+
+```
+
+## Signals
+
+## Users
+
 
 # lampson's Law
 As lampson states in his well-regarded "Hitns for Computer Systems Design", **Get it right**. Neither abstraction nor simplicity is a substitue for getting it right. Sometimes, you just have todo the right thing, and when you do, it is way better than the alternatives. There are lots of ways to design APIs for process creation; howerver, the combination of fork() and exec() are simple and inmensely powerful. Here, the UNIX designers simply got it right. And because Lampson so often "got it right", we name the law in his honor.

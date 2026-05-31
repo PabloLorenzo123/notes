@@ -84,3 +84,15 @@ I think this has something to do with asp.net cancellation tokens.
 Easier to implement than server sent events.
 
 ## gRPC
+
+
+## Whats Next.
+- UBER DESIGN (On driver's end). Uber for Driver.
+
+- News Aggreated System
+
+- Internal architecture redis.
+
+- Partitions, databases.
+
+- Databases types.

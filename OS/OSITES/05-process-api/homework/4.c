@@ -8,6 +8,17 @@
 // execv(), execvp(), and execvP(). Why do you think there
 // are so many variants of the same basic call?
 
+// The most essential exec is execve() the others are wrapped around it.
+// v -> vector (expects an array as the programs arguments)
+// e -> can configure different environment variables, by default it copies the parent environment variables.
+// p -> search also in PATH when executing the program, so you can pass ls instead of /bin/ls for instance.
+// execvp(char* program, char* args[]);
+// execvpe(char* program, char* args[], char *envp[]);
+// execlp(char* program, char* first_param, char* second_param, ...);
+// execl(char* program, char* first_param, char* second_param, ...);
+// execle(char* program, char* first_param, char* scond_param, char *envp[]);
+// execvP() is not part of POSIX.
+
 int main(){
     int rc = fork();
     if (rc == -1){

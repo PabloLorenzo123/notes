@@ -54,7 +54,7 @@ in C# we have solutions and projects.
 ### DOTNET RESTORE [<PROJECT | SOLUTION | FILE>...] [options]
 This command will look into the project/solution or file, and resolve its dependencies, it will download those nuget packages and save them in a global cache.
 
-## DOTNET BUILD
+### DOTNET BUILD
 This command will convert the C# source code into Intermediary Language code, saved in DLLS.
 
 Please note: .dll is not something C# specific, it's the dynamic link library windows use to support dynamic linking. But keep in mind, that the C# compiler ROSLYN converts saves Intermediary language into this .dll not native machine code, as would be the case in C.
@@ -79,7 +79,7 @@ JIT compiles methods
 CPU executes native code
 ```
 
-## DOTNET PUBLISH
+### DOTNET PUBLISH
 Build is more focused for development purposes, while publish is telling dotnet "Prepare my application for execution on a target environment.", it executes this pipeline:
 
 ```restore -> build -> publish```
@@ -106,3 +106,8 @@ also read this: https://www.reddit.com/r/dotnet/comments/18zxpsm/difference_betw
 documentation:
 - https://learn.microsoft.com/en-us/dotnet/core/tools/dotnet-build
 - https://learn.microsoft.com/en-us/dotnet/core/tools/dotnet-publish
+
+### The /obj folder.
+
+
+## GOLANG (COMPILED - SIMPLEST)

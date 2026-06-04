@@ -35,18 +35,18 @@ multipart/form-data consists of a single HTTP body divided into multiple parts u
 
 ex:
 ```
-POST /upload HTTP1/1.1
+POST /upload HTTP 1.1
 host: example.api.com
-content-type: multipart/form-data; boundary="abc"
+content-type: multipart/form-data; boundary=abc
 
 --abc
 content-disposition: form-data; name="profile-photo"; filename="profile-photo.jpg"
-content-type: image/jpg
+content-type: image/jpeg
 
 <binary content of the photo>
 
 --abc
-content-disposition: form-data; name=fullname
+content-disposition: form-data; name="fullname"
 content-type: text/plain
 
 Pablo Lorenzo

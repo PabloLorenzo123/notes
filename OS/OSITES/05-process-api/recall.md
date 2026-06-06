@@ -217,7 +217,11 @@ int main(int argc, char *argv[])
 NOTE: Close every pipe end that a process does not need, because open write ends prevent readers from seeing EOF.
 
 ## Signals
-A signal is a notification to a process, should as 'stop' with ctrl-c the program can catch a SIGINT signal, and maybe exit gracefully.
+A signal is a notification to a process, should as 'stop' with ctrl-c the program can catch a **SIGINT** signal, and maybe exit gracefully.
+
+Another signal is **SIGTERM**: Please shut down nicely.
+**SIGKILL**: Die inmediately.
+
 ex:
 ```
 #include <stdio.h>
@@ -240,6 +244,42 @@ int main(void) {
     return 0;
 }
 ```
+
+### CONNECTION: WHY DOCKER PREFERS EXEC MODE OVER SHELL MODE WHEN EXECUTING COMMANDS.
+
+When executing a command in a Dockerfile - the file that specifies how a container should be built, there are two ways to write the command (CMD). One approach is, the shell mode, is simply writing the command, ex:
+
+```
+FROM node
+
+COPY . .
+
+CMD npm start 
+```
+
+docker actually does
+```
+/bin/sh -c "npm start"
+```
+
+This means the shell process ```sh``` becomes PID 1 inside the container, while the actual application process ```npm``` becomes a child process. This can create issues with signal handling.
+
+this approach has the following issue, when the container is running, let's say in an attached mode, when you press CTRL + C (which triggers a SIGINT) signal, it's likely that the process receiving this signal won't be npm, but rather the shell proccess which called npm, meaning the parent process of npm. Additionally, PID 1 in Linux has special responsibilities and signal-handling behavior. If the shell is PID 1 instead of the application itself, graceful shutdowns may fail, potentially leaving child processes running temporarily or forcing Docker to kill the container abruptly with SIGKILL after a timeout.
+
+This is why docker recommends using the exec form, which ensures that the npm process has the PID 1 and will receive te signals correctly.
+
+Well npm is not a good example, because this is a wrapper process which called node. this is why developer prefer using node in the cmd, instead of a npm script defined in the package.json.
+
+ex:
+
+```
+FROM node
+
+COPY . .
+
+CMD [ "npm", "start" ]
+```
+
 
 ## Users
 Users are used to identify what processes can use other processes, and what they can do with files. For instance as you saw earlier, we made a program which can call ls and wc, and even read some files, the kernel allows this because the user that triggered the program have the correct priviliges to execute these other programs. But image a malicious script, which try to delete the entire computer, the kernel needs to protect against that, for this the concept of ``users`` is borned, if this maliccious program run as low privilige user then it may not cause harm, but if you `run it as administrator` it may cause harm.

@@ -53,6 +53,8 @@ when a browser ask for something, the proxy cache will check if it's already cac
 
 This happens with CDNs, NGNIX, Azure APIM, etc.
 
+# Cookies
+
 # Conditional GETs
 But how does a cache know that its data is not stale? http has some ways around that. The cache can make conditional GETs, in spirit this consist of asking for a resource, and the server will only return the update resource if it has been updated. There are two was.
 

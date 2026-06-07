@@ -174,7 +174,7 @@ The kernel does NOT understand shell syntax.
 
 ---
 
-# EXECUTION FLOW OF A SCRIPT
+## EXECUTION FLOW OF A SCRIPT
 
 Suppose:
 
@@ -210,7 +210,7 @@ commands execute
 
 ---
 
-# /usr/bin/env
+## /usr/bin/env
 
 Another common shebang is:
 
@@ -256,7 +256,7 @@ Windows CRLF endings can sometimes corrupt shell scripts because hidden `\r` cha
 
 ---
 
-# VALID SCRIPT EXAMPLES
+## VALID SCRIPT EXAMPLES
 
 POSIX shell script:
 
@@ -273,4 +273,41 @@ Node script:
 #!/usr/bin/env node
 
 console.log("hello")
+```
+
+
+# POSIX SHELL COMMANDS
+
+## CHMOD (Change Mode)
+This is used to change the permissions a user, group and others have in a file.
+I've encounterd an use case, in where i was connection through SSH to a virtual machine. and the SSH client didn't let me connect.
+Because the .pem file which contained the private key was very exposed.
+
+Check permissions of a file:
+
+```
+ls -l private_key.pem
+```
+It was 777, meaning everyone can read, write and execute it.
+
+The value of the permision depends on the following:
+```
+- --- = 0
+- --x = 1
+- -w- = 2
+- -wx = 3
+- r-- = 4
+- r-x = 5
+- rw- = 6
+- rwx = 7
+```
+and permisions are defined like this (first three letters for user)(second triplet is for group)(last triplet is for others), so
+rwxrwxrwx = rwx rwx rwx is 7 7 7 = 777.
+
+To fix the issue i had to change the permission to level 600. meaning:
+rw- --- --- = 6 0 0 = 600.
+
+using this command:
+```
+chmod 600 private_key.pem
 ```

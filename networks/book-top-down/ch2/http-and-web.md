@@ -54,6 +54,34 @@ when a browser ask for something, the proxy cache will check if it's already cac
 This happens with CDNs, NGNIX, Azure APIM, etc.
 
 # Cookies
+Cookies is a workaround on the fact that http is a stateless protocol, meaning that each request is treated as the first message the server receives from a client, the http message itself should include session information to help the server identify who's it talking to. These are used in many use cases, specially when we want the client to keep a state, such as authentication, a cart in a commerce site, or an identity the server use to track someone.
+
+It goes like this, the server generates a unique string which we call 'cookie', in the http response it adds the header Set-Cookie: cookie;
+
+```
+HTTP/1.1 200 OK
+Set-Cookie: session_id=abc123
+```
+
+Options can be added to this ```Set-Cookie``` response header:
+- ;Samesite:
+    - Strict: browser will only send this cookie in same-site requests.
+    - Lax: Same origin and some top level cross-site navigations.
+    - None: allows the cookie to be sent in cross-site requests, but it requires ```Secure```.
+    - Domain: control which domain and subdomains can receive the cookie.
+    - Path: controls which URL paths receive the cookie.
+- ;HttpOnly: if true, javascript code can't read the cookie through the api document.cookie.
+- ;Secure: only send the cookie through a https connection.
+
+Browsers, are instructed to save the value of this set-cookie response header in the browser storage. An each time, the browser makes a request to this server it will add this cookie in the cookie request header.
+
+```
+GET api.example.com/shopping-cart HTTP/1.1
+User-Agent: Chrome
+Cookie: auth_code=my-cookie1; cart_id=my-cookie2;
+```
+
+Cookies can be used to spy someone's traffic on the web, for instance you visited amazon.com, and amazon sent you a cookie and you saved it, later on you visit facebook marketplace and there happens to be an amazon iframe or image, your browser will then send a request to amazon.com attaching your cookie and adding the referer request header (facebook.com/marketplace/shoes), now amazon knows, user with this cookie is intered in shoes. Next time when you visit amazon, you'll see shoes on the first page, and the advertisements will seem like someone is spying you.
 
 # Conditional GETs
 But how does a cache know that its data is not stale? http has some ways around that. The cache can make conditional GETs, in spirit this consist of asking for a resource, and the server will only return the update resource if it has been updated. There are two was.

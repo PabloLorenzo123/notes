@@ -28,6 +28,12 @@ It seems that the actual system is the Uber App.
 4. Scalable.
 5. Handle High Throughput.
 
+## Schema
+- Fare
+- Ride
+- Driver
+- Rider
+
 ## API DESIGN
 
 ### POST /fare
@@ -40,6 +46,32 @@ It seems that the actual system is the Uber App.
 
 ### GET /ride/{fareId}/drivers
 
+### POST /ride
+```
+{
+    fareId
+}
+```
+
 ### POST /driverlocation
+```
+{
+    lat,
+    long
+}
+```
 
 ### POST /ride/id
+```
+{
+    accept/reject
+}
+```
+
+## Technologies
+### POSTGRES GIS
+
+### APNs Apple Push Notifications & FCM (Firebase Cloud Messaging)
+
+## Redis Geohash
+Redis can process 100,000 to 150,000 requests per seconds.

@@ -1,4 +1,5 @@
 # Ticket Master
+![alt text](image-2.png)
 
 ## Functional Requirements.
 1 - Users can buy tickets for events
@@ -30,3 +31,5 @@ POST /booking
 }
 ```
 
+## Problems
+1. Ticket Locking

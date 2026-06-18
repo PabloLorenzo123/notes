@@ -339,3 +339,6 @@ Addresses:  13.107.226.41
 Unit only has two ip addresses.
 
 ### THE DNS CLIENT MESSAGE FORMAT.
+It has a header with some fields, first an identifier field, because DNS runs on UDP and doesn't build connections like TCP, it adds a unique identifier to every query the DNS resolver makes, so when it receives a response (which will include the same identifier) it can identify to which query the respond is for, though this design makes DNS susceptible to DNS poisoning.
+
+Then it has a questions field, where the queries questions are sent in, and answer field where the answers are sent. Another field which is number of questions, and a number of answers field.

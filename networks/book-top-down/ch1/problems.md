@@ -50,7 +50,7 @@ Ethernet can run over several types of physical media, including twisted-pair co
 We have Wi-fi (WLAN) IEEE 802.11 and Cellular Networks (3g, 4g, 5g). Their main difference is that the former provides access at a shorter range, the signal is susceptible to loss due to physical objects and it' used mainly in home and enterprise networks. The latter provides way broader ranges - Wide Area Network, but lower speeds.
 
 # SECTION 1.3
-# R11. Suppose there is exactly one packet switch between a sending host and a  receiving host. The transmission rates between the sending host and the switch and between the switch and the receiving host are R1 and R2, respectively. Assuming that the switch uses store-and-forward packet switching,  what is the total end-to-end delay to send a packet of length L? (Ignore queuing, propagation delay, and processing delay.)
+## R11. Suppose there is exactly one packet switch between a sending host and a  receiving host. The transmission rates between the sending host and the switch and between the switch and the receiving host are R1 and R2, respectively. Assuming that the switch uses store-and-forward packet switching,  what is the total end-to-end delay to send a packet of length L? (Ignore queuing, propagation delay, and processing delay.)
 
 Let's say packet length is 100mb, and R1 and R2 is 100mbs.
 
@@ -59,10 +59,10 @@ From middle switch to receiving host 100mb / (100mb/s) = 1s
 
 1s + 1s = 2 seconds.
 
-# R12. What advantage does a circuit-switched network have over a packet-switched network? What advantages does TDM have over FDM in a circuit-switched network.
+## R12. What advantage does a circuit-switched network have over a packet-switched network? What advantages does TDM have over FDM in a circuit-switched network.
 
 
-# R13. Suppose users share a 2 Mbps link. Also suppose each user transmits continuously at 1 Mbps when transmitting, but each user transmits only 20 percent  of the time. (See the discussion of statistical multiplexing in Section 1.3.)
+## R13. Suppose users share a 2 Mbps link. Also suppose each user transmits continuously at 1 Mbps when transmitting, but each user transmits only 20 percent  of the time. (See the discussion of statistical multiplexing in Section 1.3.)
 
 a. When circuit switching is used, how many users can be supported?
 
@@ -71,3 +71,16 @@ b. For the remainder of this problem, suppose packet switching is used. Why will
 c. Find the probability that a given user is transmitting.
 
 d. Suppose now there are three users. Find the probability that at any given  time, all three users are transmitting simultaneously. Find the fraction of time during which the queue grows.
+
+## R14. Why will two ISPs at the same level of the hierarchy often peer with each other? How does an IXP earn money?
+
+## R15. Some content providers have created their own networks. Describe Google’s  network. What motivates content providers to create these networks?
+
+
+# SECTION 1.4
+
+## R16. Consider sending a packet from a source host to a destination host over a  fixed route. List the delay components in the end-to-end delay. Which of  these delays are constant and which are variable?
+
+## R17. Visit the Transmission Versus Propagation Delay interactive animation at  the companion Web site. Among the rates, propagation delay, and packet  sizes available, find a combination for which the sender finishes transmitting  before the first bit of the packet reaches the receiver. Find another combination for which the first bit of the packet reaches the receiver before the sender  finishes transmitting.
+
+## R18. How long does it take a packet of length 1,000 bytes to propagate over a  link of distance 2,500 km, propagation speed 2.5 # 108 m/s, and transmission  rate 2 Mbps? More generally, how long does it take a packet of length L to  propagate over a link of distance d, propagation speed s, and transmission rate R bps? Does this delay depend on packet length? Does this delay depend on transmission rate?
